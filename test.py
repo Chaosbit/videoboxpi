@@ -7,18 +7,34 @@ from pyomxplayer import OMXPlayer
 GPIO.setmode(GPIO.BCM)  
   
 GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)  
-  
+
+omx_status = False 
 omx = OMXPlayer('/videos/dgzrs.mp4', '-o local -rb')
+
+def start_video():
+    global omx, omx_status
+    if(omx_status):
+	print "video already running"
+    else:
+	omx.toggle_pause()
+	omx_status = True
+
+def stop_video():
+    global omx, omx_status
+    if(omx_status):
+    	omx.stop()
+    	omx = OMXPlayer('/videos/dgzrs.mp4', '-o local -rb')
+	omx_status = False
+    else:
+	print "video not running"
   
 def my_callback2(channel):
-    global omx
     if GPIO.input(channel) > 0:
     	print "stopping video"
-	# omx.toggle_pause() 
+	stop_video()
     else:
         print "starting video"
-	# omx.stop()
-	# omx = OMXPlayer('/videos/dgzrs.mp4', '-o local -rb')
+	start_video()
   
 GPIO.add_event_detect(23, GPIO.BOTH, callback=my_callback2, bouncetime=100)  
   
