@@ -20,9 +20,9 @@ def my_callback(channel):
   
 def my_callback2(channel):
     if GPIO.input(channel) > 0:
-        print "stopping video"
-    else:
     	print "starting video"  
+    else:
+        print "stopping video"
   
 print "Make sure you have a button connected so that when pressed"  
 print "it will connect GPIO port 23 (pin 16) to GND (pin 6)\n"  
